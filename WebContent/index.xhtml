@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+function WebSocketTest()
+{
+  if ("WebSocket" in window)
+  {
+     alert("WebSocket is supported by your Browser!");
+     // Let us open a web socket
+     var ws = new WebSocket("ws://localhost:9998/echo");
+     ws.onopen = function()
+     {
+        // Web Socket is connected, send data using send()
+        ws.send("Message to send");
+        alert("Message is sent...");
+     };
+     
+     ws.onmessage = function (evt) 
+     { 
+        var received_msg = evt.data;
+        alert("Message is received...");
+     };
+     
+     ws.onclose = function()
+     { 
+        // websocket is closed.
+        alert("Connection is closed..."); 
+     };
+  }
+  else
+  {
+     // The browser doesn't support WebSocket
+     alert("WebSocket NOT supported by your Browser!");
+  }
+}
+</script>
+</head>
+
+<body>
+	<h:form id="myform">
+		<h:panelGrid width="500" columns="1" border="0">
+			<h:panelGroup>
+				<h:outputText value="Enter your name : " />
+				<h:inputText size="20" id="userName" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:outputText value="Chat Window" />
+				<h:inputTextarea rows="10" style="width: 490px; " />
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:inputText size="60" />
+				<h:button value="Send" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+</body>
+</html>

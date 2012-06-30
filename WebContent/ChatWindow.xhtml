@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<head>
+<title>Chat Window</title>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+	var ws;
+	
+	$(document).ready(function() {
+		// alert("hello");
+		//$("#chatForm\\:name").val("Hello there");
+
+		
+		ws = new WebSocket("ws://localhost:8080/WebsocketDemo/WebSocketServlet/myChat");
+		
+		ws.onopen = function(event) {
+			alert("Open");		
+		};
+		
+		
+		ws.onmessage = function(event) {
+			onMessage(event)
+		};
+		
+		ws.onclose = function(event) {
+			alert("Close!");
+		};
+				 
+		});
+		
+		
+		function onMessage( event )
+		{
+			
+			$('#messages').val($('#messages').val() + event.data + "\n");
+			$('#messages').animate({
+				scrollTop : $('#messages').height()
+			}, 1000);
+			
+			//alert("ReturneValue : " + event.data);
+			//$('#messages').val( event.data);			
+		}
+		
+		function sendMessage() {
+			var message = $('#name').val() + " - " + $('#message').val();
+			ws.send(message);
+			$('#message').val('');
+			//alert("msg sent");
+		}
+		 
+
+	
+</script>
+</head>
+<body>
+	<h:form id="chatForm">
+		<h:panelGrid width="500" columns="1" border="0">
+			<h:panelGroup>
+				<h:outputText value="Enter your name : " />
+				<input size="20" id="name" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:outputText value="Chat Window" />
+				<textarea rows="10" id="messages" style="width: 490px; "></textarea>
+			</h:panelGroup>
+			<h:panelGroup>
+				<input type="text" id="message" size="60" />
+				<input value="Send" onclick="sendMessage();" type="button" />
+			</h:panelGroup>
+
+		</h:panelGrid>
+	</h:form>
+</body>
+</html>
